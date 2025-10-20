@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>随机分组展示</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 30px;
+      }
+
+      .group-container {
+        margin-top: 20px;
+      }
+
+      .group {
+        margin: 10px 0;
+      }
+
+      input,
+      button {
+        padding: 10px;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>随机分组展示</h1>
+    <p>请输入一个数字，将会把 1 到该数随机分为每组三个元素：</p>
+    <input type="number" id="numberInput" placeholder="请输入数字" min="3" />
+    <button onclick="generateGroups()">生成分组</button>
+
+    <div class="group-container" id="result"></div>
+
+    <script>
+      function generateGroups() {
+        // 获取输入的数字
+        const num = parseInt(document.getElementById("numberInput").value);
+
+        // 判断输入是否合法
+        if (isNaN(num) || num < 3) {
+          alert("请输入一个大于或等于3的数字！");
+          return;
+        }
+
+        // 创建一个数字数组 [1, 2, ..., num]
+        const arr = Array.from({ length: num }, (_, i) => i + 1);
+
+        // 随机打乱数组
+        shuffleArray(arr);
+
+        // 分组，每组3个
+        const groups = [];
+        for (let i = 0; i < arr.length; i += 3) {
+          groups.push(arr.slice(i, i + 3));
+        }
+
+        // 显示结果
+        displayGroups(groups);
+      }
+
+      // 随机打乱数组函数
+      function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]]; // 交换元素
+        }
+      }
+
+      // 展示分组结果
+      function displayGroups(groups) {
+        const resultContainer = document.getElementById("result");
+        resultContainer.innerHTML = ""; // 清空之前的结果
+
+        groups.forEach((group, index) => {
+          const groupDiv = document.createElement("div");
+          groupDiv.classList.add("group");
+          groupDiv.innerHTML = `组 ${index + 1}: ${group.join(", ")}`;
+          resultContainer.appendChild(groupDiv);
+        });
+      }
+    </script>
+  </body>
+</html>
